@@ -1,35 +1,66 @@
 import { ActionFetchSpells, ActionType } from "./type";
 
-const initialState = {
+
+interface SpellsState {
+  error: null | string;
+  data: any[]; // You can replace 'any' with the actual type of the data array.
+  isLoading: boolean;
+  favoriteSpells: any[]; // Replace 'any' with the type representing the favorite spells.
+  singleSpell: any | null; // Replace 'any' with the type representing a single spell or null.
+}
+
+// Define the initial state
+const initialState: SpellsState = {
   error: null,
   data: [],
   isLoading: true,
+  favoriteSpells: [],
+  singleSpell: null,
 };
-
 const spellsReducer = (
-  state: object = initialState,
+  state: SpellsState = initialState,
   action: ActionFetchSpells
 ) => {
   switch (action.type) {
     case ActionType.FETCH_ALL_SPELLS:
-      return fetchSpellData(action);
+      return fetchSpellData(state, action);
+
+    case ActionType.FETCH_SINGLE_SPELL:
+      return {
+        ...state,
+        singleSpell: action.payload,
+      };
 
     case ActionType.SET_LOADING:
       return {
         ...state,
         isLoading: action.payload,
       };
+
+    case ActionType.ADD_TO_FAVORITES:
+      return {
+        ...state,
+        favoriteSpells: [...state.favoriteSpells, action.payload],
+      };
+
+    case ActionType.REMOVE_FROM_FAVORITES:
+      return {
+        ...state,
+        favoriteSpells: state.favoriteSpells.filter(
+          (spellIndex) => spellIndex !== action.payload
+        ),
+      };
+
     default:
       return state;
   }
 };
 
-const fetchSpellData = (action: ActionFetchSpells) => {
-  let updatedStateData = {
-    ...initialState,
+const fetchSpellData = (state: SpellsState, action: ActionFetchSpells) => {
+  return {
+    ...state,
     data: action?.payload,
   };
-  return updatedStateData;
 };
 
 export default spellsReducer;
