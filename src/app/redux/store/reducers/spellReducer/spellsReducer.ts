@@ -1,6 +1,7 @@
+// Import the types related to actions and action types
 import { ActionFetchSpells, ActionType } from "./type";
 
-
+// Define the shape of the spells state
 interface SpellsState {
   error: null | string;
   data: any[]; // You can replace 'any' with the actual type of the data array.
@@ -9,7 +10,7 @@ interface SpellsState {
   singleSpell: any | null; // Replace 'any' with the type representing a single spell or null.
 }
 
-// Define the initial state
+// Define the initial state for the spells state
 const initialState: SpellsState = {
   error: null,
   data: [],
@@ -17,6 +18,8 @@ const initialState: SpellsState = {
   favoriteSpells: [],
   singleSpell: null,
 };
+
+// Define the spellsReducer function that handles different action types
 const spellsReducer = (
   state: SpellsState = initialState,
   action: ActionFetchSpells
@@ -56,6 +59,7 @@ const spellsReducer = (
   }
 };
 
+// Helper function to update the state when fetching spell data
 const fetchSpellData = (state: SpellsState, action: ActionFetchSpells) => {
   return {
     ...state,
@@ -63,4 +67,5 @@ const fetchSpellData = (state: SpellsState, action: ActionFetchSpells) => {
   };
 };
 
+// Export the spellsReducer function to be used in the Redux store
 export default spellsReducer;
